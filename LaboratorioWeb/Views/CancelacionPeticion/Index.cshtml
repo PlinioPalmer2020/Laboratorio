@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Cancelacion de peticiones";
+}
+
+<div class="container">
+
+    <div>
+        <h2> Cancelar una peticion</h2>
+
+        <div class="row align-items-start">
+            <div class=" col-4">
+                <form class="form-inline" style="display: inline;" asp-action="Peticion" method="get">
+                    <button type="submit" class="btn btn-primary"> Enviar peticion</button>
+                </form>
+            </div>
+
+            <div class=" col-4 ">
+                <form class="form-inline" asp-action="CancelarPeticion" method="get">
+                    <button type="submit" class="btn btn-danger"> Cancelar peticion</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
