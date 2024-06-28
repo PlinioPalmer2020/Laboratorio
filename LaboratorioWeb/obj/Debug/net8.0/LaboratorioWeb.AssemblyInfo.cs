@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LaboratorioWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3309255e1aa75b227cdb71082123dcca6c96e1df")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5c27a390e8204d00cd239b9279cf7b075f4389d5")]
 [assembly: System.Reflection.AssemblyProductAttribute("LaboratorioWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LaboratorioWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

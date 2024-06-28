@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,9 +51,8 @@ namespace LaboratorioWeb.Controllers
         #region Peticion Cancelada con Ajax
 
         [HttpGet]
-        public async Task<IActionResult> PeticionAjax(string taskId)
+        public async Task<IActionResult> PeticionAjax(string taskId, CancellationToken cancellation)
         {
-            //Guid taskId = Guid.NewGuid();
             var cancellationTokenSource = new CancellationTokenSource();
             _tasks[taskId] = cancellationTokenSource;
 
@@ -64,18 +64,19 @@ namespace LaboratorioWeb.Controllers
                 {
                     while (!cancellationToken.IsCancellationRequested)
                     {
+                        cancellation.ThrowIfCancellationRequested();
                         await Task.Delay(100);
                     }
 
                 }, cancellationToken);
 
                 _tasks.TryRemove(taskId, out _);
-                return BadRequest("Tarea no Cancela con Existo :(");
+                return Ok("Tarea Cancela con Existo :D");
             }
             catch (Exception ex)
             {
                 _tasks.TryRemove(taskId, out _);
-                return Ok("Tarea Cancela con Existo :D");
+                return Ok("Tarea Cancela con Existo :D, pero con error :D");
             }
         }
 
