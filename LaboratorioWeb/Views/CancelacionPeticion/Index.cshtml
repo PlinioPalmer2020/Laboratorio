@@ -22,4 +22,95 @@
         </div>
     </div>
 
+    <div class="mt-5">
+        <h2> Cancelar de varias peticiones</h2>
+
+        <div class="row align-items-start">
+            <div class=" col">
+                <button class="btn btn-primary" id="enviarPeticion"> Enviar peticion</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <h3>Active Tasks</h3>
+                <ul id="taskList">
+                    <!-- Este es un ejemplo estático, en una aplicación real, deberías actualizar este listado dinámicamente -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+<script>
+
+    $(document).ready(function () {
+        $("#enviarPeticion").click(function () {
+            let numeroAleatorio = Math.floor(Math.random() * 100000000);
+            let url = "@Url.Action("PeticionAjax", "CancelacionPeticion")" + "?taskId=" + numeroAleatorio;
+            addTask(numeroAleatorio);
+
+            $.get(url, function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+    });
+
+    function cancelTask(taskId) {
+        $.ajax({
+            url: '@Url.Action("CancelarPeticionAjax", "CancelacionPeticion")',
+            type: 'POST',
+            data: { taskId: taskId },
+            success: function (response) {
+                alert('Task ' + taskId + ' has been cancelled successfully.');
+                // Optionally, remove the task from the list
+                $('#task-' + taskId).remove();
+            },
+            error: function (xhr, status, error) {
+                alert('Error cancelling task ' + taskId + ': ' + error);
+            }
+        });
+    }
+
+    function addTask(taskId) {
+        var listItem = $('<li>').attr('id', 'task-' + taskId).text('Task ' + taskId + ' ');
+
+        var button = $('<button>').text('Cancel').on('click', function () {
+            cancelTask(taskId);
+        });
+
+        listItem.append(button);
+        $('#taskList').append(listItem);
+    }
+
+    // function cancelTask(taskId) {
+    //     var form = document.createElement('form');
+    //     form.method = 'post';
+    //     form.action = '@Url.Action("CancelarPeticionAjax", "CancelacionPeticion")';
+
+    //     var input = document.createElement('input');
+    //     input.type = 'hidden';
+    //     input.name = 'taskId';
+    //     input.value = taskId;
+
+    //     form.appendChild(input);
+    //     document.body.appendChild(form);
+    //     form.submit();
+    // }
+
+
+    // function addTask(taskId) {
+    //     var listItem = document.createElement('li');
+    //     listItem.textContent = `Task ${taskId} `;
+
+    //     var button = document.createElement('button');
+    //     button.textContent = 'Cancel';
+    //     button.onclick = function () { cancelTask(taskId); };
+
+    //     listItem.appendChild(button);
+    //     document.getElementById('taskList').appendChild(listItem);
+    // }
+
+</script>
+

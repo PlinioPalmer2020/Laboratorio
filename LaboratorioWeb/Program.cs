@@ -5,6 +5,9 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+ThreadPool.SetMinThreads(10, 10);
+ThreadPool.SetMaxThreads(100, 100);
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
