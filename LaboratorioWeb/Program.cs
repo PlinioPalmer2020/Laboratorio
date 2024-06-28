@@ -3,6 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.WebHost.UseKestrel(so =>
+{
+    so.Limits.MaxConcurrentConnections = 100;
+    so.Limits.MaxConcurrentUpgradedConnections = 100;
+    so.Limits.MaxRequestBodySize = 52428800;
+});
 var app = builder.Build();
 
 ThreadPool.SetMinThreads(10, 10);

@@ -54,24 +54,18 @@ namespace LaboratorioWeb.Controllers
         public async Task<IActionResult> PeticionAjax(string taskId, CancellationToken cancellation)
         {
             var cancellationTokenSource = new CancellationTokenSource();
-            _tasks[taskId] = cancellationTokenSource;
-
             var cancellationToken = cancellationTokenSource.Token;
 
             try
             {
-                await Task.Run(async () =>
+                while (!cancellationTokenSource.Token.IsCancellationRequested)
                 {
-                    while (!cancellationToken.IsCancellationRequested)
-                    {
-                        cancellation.ThrowIfCancellationRequested();
-                        await Task.Delay(100);
-                    }
-
-                }, cancellationToken);
+                    cancellation.ThrowIfCancellationRequested();
+                    await Task.Delay(100, cancellationTokenSource.Token);
+                }
 
                 _tasks.TryRemove(taskId, out _);
-                return Ok("Tarea Cancela con Existo :D");
+                return Ok("Tarea cancelada con éxito.");
             }
             catch (Exception ex)
             {
