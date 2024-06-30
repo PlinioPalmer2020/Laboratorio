@@ -11,6 +11,7 @@ namespace LaboratorioWeb.Controllers
 
         private static CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
         private static ConcurrentDictionary<string, CancellationTokenSource> _tasks = new ConcurrentDictionary<string, CancellationTokenSource>();
+        private static ConcurrentDictionary<string, CancellationToken> _tasksToken = new ConcurrentDictionary<string, CancellationToken>();
         public IActionResult Index()
         {
             return View();
@@ -54,17 +55,23 @@ namespace LaboratorioWeb.Controllers
         public async Task<IActionResult> PeticionAjax(string taskId, CancellationToken cancellation)
         {
             var cancellationTokenSource = new CancellationTokenSource();
-            var cancellationToken = cancellationTokenSource.Token;
+            _tasks[taskId] = cancellationTokenSource;
+            _tasksToken[taskId] = cancellationTokenSource.Token;
 
             try
             {
-                while (!cancellationTokenSource.Token.IsCancellationRequested)
+                await Task.Run(async () =>
                 {
-                    cancellation.ThrowIfCancellationRequested();
-                    await Task.Delay(100, cancellationTokenSource.Token);
-                }
+                    while (!_tasksToken[taskId].IsCancellationRequested)
+                    {
+                        cancellation.ThrowIfCancellationRequested();
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+
+                }, cancellation);
 
                 _tasks.TryRemove(taskId, out _);
+                _tasksToken.TryRemove(taskId, out _);
                 return Ok("Tarea cancelada con éxito.");
             }
             catch (Exception ex)
