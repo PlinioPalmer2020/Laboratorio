@@ -15,10 +15,26 @@ namespace LaboratorioWeb.Controllers
         }
 
         // GET: Employees
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(CancellationToken cancellationToken)
         {
-            var northwindContext = _context.Employees.Include(e => e.ReportsToNavigation);
-            return View(await northwindContext.ToListAsync());
+            try
+            {
+                var sql = @"
+                    WAITFOR DELAY '00:0:05'; -- Retraso de 1 minutos
+                    SELECT * FROM [Northwind].[dbo].[Employees]
+                     ";
+
+                //var northwindContext = _context.Employees.Include(e => e.ReportsToNavigation);
+                //return View(await northwindContext.ToListAsync(cancellationToken));
+                var northwindContext = await _context.Employees.FromSqlRaw(sql).ToListAsync(cancellationToken);
+                return View(northwindContext);
+            }
+            catch (Exception ex)
+            {
+
+                
+            }
+            return Ok();
         }
 
         // GET: Employees/Details/5
