@@ -63,7 +63,7 @@
             type: 'POST',
             data: { taskId: taskId },
             success: function (response) {
-                alert('Task ' + taskId + ' has been cancelled successfully.');
+                alert(response);
                 // Optionally, remove the task from the list
                 $('#task-' + taskId).remove();
             },
